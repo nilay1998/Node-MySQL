@@ -11,12 +11,21 @@ router.get('/getAll', (req,res) =>{
     });
 });
 
+router.get('/getContacts', (req,res) =>{
+    const phoneNumbers=req.query.phone;
+    var sql = "SELECT * FROM UserInfo where phone IN ('" + phoneNumbers.join("','") + "')";
+    //console.log(sql);
+    mysqlConnection.query(sql, (err,rows,fields)=>{
+        if(err) throw err;
+        console.log(rows);
+    });
+});
+
 router.post('/login',(req,res)=>{
     const userData={
         email:req.body.email,
         password:req.body.password
     };
-
     mysqlConnection.query('select * from UserInfo where email=?',req.body.email,async (err,rows,fields)=>{
         if(err) throw err;
         if(rows.length == 0) return res.json({status:'0',message:'Invalid Email or Password'});

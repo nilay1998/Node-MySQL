@@ -1,6 +1,4 @@
 const mysqlConnection=require("./connection");
-
-
 function createTable()
 {
     var sql="create table if not exists UserInfo ("+
