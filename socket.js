@@ -4,13 +4,13 @@ function socketConnection(io)
 {
     io.on('connection',socket=>{
 
-        console.log('Made Socket Connection\nSocketID:'+socket.id);
+        console.log('Made Socket Connection: '+socket.id);
     
         socket.on('join', email => {
             const sql="UPDATE UserInfo SET socketID=? WHERE email=?";
             mysqlConnection.query(sql,[socket.id,email],(err,rows,fields)=>{
                 if(err) throw err;
-                console.log("Database Updated");
+                console.log("SocketID Updated");
             });
         });
         
@@ -19,15 +19,21 @@ function socketConnection(io)
             mysqlConnection.query(sql,receiver,(err,rows,fields)=>{
                 if(err) throw err;
 
-                console.log("Receiver SocketID: "+rows[0].socketID+" : "+socket.id);
-                const msg = {'sender':sender,'message':message};
+                //console.log("Receiver SocketID: "+rows[0].socketID+" : "+socket.id);
+                console.log("Sender: "+sender+" Receiver: "+receiver+" Message:"+message);
+                //const msg = {'sender':sender,'message':message};
                 const id=rows[0].socketID;
-                socket.to(id).emit('messageToUser', msg);
-                    const MsgData={
-                    sender:sender,
-                    receiver:receiver,
-                    message:message
+                console.log("Sending to SocketID: "+id);
+
+                const MsgData={
+                    sender: sender,
+                    receiver: receiver,
+                    message: message
                 };
+                
+                socket.to(id).emit('messageToUser', MsgData);
+                //socket.broadcast.emit('messageToUser', MsgData);
+                    
 
                 sql="INSERT INTO msg set ?";
                 mysqlConnection.query(sql,MsgData, (err,rows,fields)=>{
