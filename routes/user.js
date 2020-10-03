@@ -21,6 +21,18 @@ router.get('/getContacts', (req,res) =>{
     });
 });
 
+router.get('/getMessages',(req,res)=>{
+    const sender=req.query.sender;
+    const receiver=req.query.receiver;
+    const users=[sender,receiver];
+    const sql="select * from msg where sender IN ('" + users.join("','") + "') and receiver IN ('" + users.join("','") + "') ORDER BY created_at";
+    console.log(sql);
+    mysqlConnection.query(sql, (err,rows,fields)=>{
+        if(err) throw err;
+        res.json(rows);
+    });
+});
+
 router.post('/login',(req,res)=>{
     const userData={
         email:req.body.email,
