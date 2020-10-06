@@ -14,7 +14,7 @@ router.get('/getAll', (req,res) =>{
 router.get('/getContacts', (req,res) =>{
     const phoneNumbers=req.query.phone;
     var sql = "SELECT email,phone FROM UserInfo where phone IN ('" + phoneNumbers.join("','") + "')";
-    //console.log(sql);
+    console.log(sql);
     mysqlConnection.query(sql, (err,rows,fields)=>{
         if(err) throw err;
         res.json(rows);
