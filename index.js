@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const socket=require('socket.io');
 const userRouter=require("./routes/user");
+require('./prod')(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));

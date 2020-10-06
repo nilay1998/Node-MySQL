@@ -1,9 +1,9 @@
 const mysql=require("mysql");
 const mysqlConnection=mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"sampleDB",
+    host:"sql12.freemysqlhosting.net",
+    user:"sql12368766",
+    password:"VptMxJbyvh",
+    database:"sql12368766",
 });
 
 mysqlConnection.connect(err=>{
