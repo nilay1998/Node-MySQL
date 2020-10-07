@@ -15,6 +15,7 @@ router.get('/getAll', (req,res) =>{
 router.get('/getSocketID',(req,res)=>{
     const email=req.query.email;
     const sql="Select socketID from UserInfo where email=?";
+    console.log(sql);
     mysqlConnection.query(sql,email,(err,rows,fields)=>{
         if(err) throw err;
         res.send(rows[0].socketID);
