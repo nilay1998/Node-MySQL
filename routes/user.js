@@ -7,6 +7,7 @@ router.get('/getAll', (req,res) =>{
     const sql="select * from UserInfo";
     mysqlConnection.query(sql, (err,rows,fields) =>{
         if(err) throw err;
+        console.log(rows);
         res.send(rows);
     });
 });
@@ -17,6 +18,7 @@ router.get('/getContacts', (req,res) =>{
     console.log(sql);
     mysqlConnection.query(sql, (err,rows,fields)=>{
         if(err) throw err;
+        console.log(rows);
         res.json(rows);
     });
 });
@@ -29,6 +31,7 @@ router.get('/getMessages',(req,res)=>{
     console.log(sql);
     mysqlConnection.query(sql, (err,rows,fields)=>{
         if(err) throw err;
+        console.log(rows);
         res.json(rows);
     });
 });
@@ -43,6 +46,7 @@ router.post('/login',(req,res)=>{
     console.log(sql);
     mysqlConnection.query(sql,req.body.email,async (err,rows,fields)=>{
         if(err) throw err;
+        console.log(rows);
         if(rows.length == 0) return res.json({status:'0',message:'Invalid Email or Password'});
         const validPassword = await bcrypt.compare(req.body.password,rows[0].password);
         if (!validPassword) return res.json({status:0,message:'Invalid email or password.'})
