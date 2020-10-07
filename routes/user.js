@@ -18,7 +18,7 @@ router.get('/getSocketID',(req,res)=>{
     console.log(sql);
     mysqlConnection.query(sql,email,(err,rows,fields)=>{
         if(err) throw err;
-        res.send(rows[0].socketID);
+        res.send({socketID:rows[0].socketID});
     });
 });
 
