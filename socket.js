@@ -16,9 +16,7 @@ function socketConnection(io)
         
         socket.on('messagedetection',(sender,receiver,message,receiverSocketID)=>{
 
-            console.log("Sender: "+sender+" Receiver: "+receiver+" Message:"+message);
-            const id=receiverSocketID;
-            console.log("Sending to SocketID: "+id);
+            console.log("Sender: "+sender+" Receiver: "+receiver+" Message:"+message+" Receiver SocketID:"+receiverSocketID);
 
             const MsgData={
                 sender: sender,
@@ -26,10 +24,9 @@ function socketConnection(io)
                 message: message
             };
             
-            socket.to(id).emit('messageToUser', MsgData);
+            socket.to(receiverSocketID).emit('messageToUser', MsgData);
 
-            
-            sql="INSERT INTO msg set ?";
+            const sql="INSERT INTO msg set ?";
             mysqlConnection.query(sql,MsgData, (err,rows,fields)=>{
                 if(err) throw err;
                 console.log("Message added to databse");
