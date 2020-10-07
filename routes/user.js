@@ -12,6 +12,15 @@ router.get('/getAll', (req,res) =>{
     });
 });
 
+router.get('/getSocketID',(req,res)=>{
+    const email=req.query.email;
+    const sql="Select socketID from UserInfo where email=?";
+    mysqlConnection.query(sql,email,(err,rows,fields)=>{
+        if(err) throw err;
+        res.send(rows[0].socketID);
+    });
+});
+
 router.post('/getContacts', (req,res) =>{
     const phoneNumbers=req.body.phone;
     var sql = "SELECT email,phone FROM UserInfo where phone IN ('" + phoneNumbers.join("','") + "')";
