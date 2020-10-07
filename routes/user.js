@@ -12,8 +12,8 @@ router.get('/getAll', (req,res) =>{
     });
 });
 
-router.get('/getContacts', (req,res) =>{
-    const phoneNumbers=req.query.phone;
+router.post('/getContacts', (req,res) =>{
+    const phoneNumbers=req.body.phone;
     var sql = "SELECT email,phone FROM UserInfo where phone IN ('" + phoneNumbers.join("','") + "')";
     console.log(sql);
     mysqlConnection.query(sql, (err,rows,fields)=>{
