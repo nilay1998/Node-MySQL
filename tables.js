@@ -15,7 +15,7 @@ function createTable()
         "id int NOT NULL AUTO_INCREMENT,"+
         "sender varchar(256) NOT NULL,"+
         "receiver varchar(256) NOT NULL,"+
-        "message varchar(256) NOT NULL,"+
+        "message TEXT NOT NULL,"+
         "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"+
         "FOREIGN KEY (sender) REFERENCES UserInfo(email),"+
         "FOREIGN KEY (receiver) REFERENCES UserInfo(email),"+

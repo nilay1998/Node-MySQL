@@ -12,6 +12,25 @@ router.get('/getAll', (req,res) =>{
     });
 });
 
+router.put('/setPublicKey',(req,res)=>{
+    const publickey=req.body.publickey;
+    const email=req.body.email;
+    const sql="UPDATE UserInfo SET publickey=? WHERE email=?";
+    mysqlConnection.query(sql,[publickey,email],(err,rows,fields)=>{
+        if(err) throw err;
+        res.json({status:'1',message:'Public Key Updated'});
+    });
+});
+
+router.get('/getPublicKey',(req,res)=>{
+    const email=req.query.email;
+    const sql="Select publickey from UserInfo where email=?";
+    console.log(sql);
+    mysqlConnection.query(sql,email,(err,rows,fields)=>{
+        if(err) throw err;
+        res.send({publickey:rows[0].publickey});
+    });
+});
 router.get('/getSocketID',(req,res)=>{
     const email=req.query.email;
     const sql="Select socketID from UserInfo where email=?";
