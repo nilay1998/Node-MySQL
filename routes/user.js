@@ -2,6 +2,7 @@ const express=require("express");
 const router=express.Router();
 const mysqlConnection=require("../connection");
 const bcrypt=require('bcrypt');
+const publickeyDH=require('../diffie-hellman');
 
 router.get('/getAll', (req,res) =>{
     const sql="select * from UserInfo";
@@ -10,6 +11,10 @@ router.get('/getAll', (req,res) =>{
         console.log(rows);
         res.send(rows);
     });
+});
+
+router.get('/getDH_PublicKey', (req,res) => {
+    res.send({prime:publickeyDH.getPrime().toString('base64'),generator:publickeyDH.getGenerator().toString('base64')});
 });
 
 router.put('/setPublicKey',(req,res)=>{
