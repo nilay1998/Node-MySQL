@@ -7,7 +7,8 @@ function createTable()
         "password varchar(256) NOT NULL,"+
         "phone varchar(256) NOT NULL,"+
         "socketID varchar(256),"+
-        "publickey TEXT,"+
+        "publickeyRSA TEXT,"+
+        "publickeyAES TEXT,"+
         "PRIMARY KEY (email))";    
     mysqlConnection.query(sql, (err) => { if(err) throw err; });
 

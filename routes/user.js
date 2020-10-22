@@ -17,23 +17,43 @@ router.get('/getDH_PublicKey', (req,res) => {
     res.send({prime:publickeyDH.getPrime().toString('base64'),generator:publickeyDH.getGenerator().toString('base64')});
 });
 
-router.put('/setPublicKey',(req,res)=>{
-    const publickey=req.body.publickey;
+router.put('/setPublicKeyRSA',(req,res)=>{
+    const publickey=req.body.publickeyRSA;
     const email=req.body.email;
-    const sql="UPDATE UserInfo SET publickey=? WHERE email=?";
+    const sql="UPDATE UserInfo SET publickeyRSA=? WHERE email=?";
     mysqlConnection.query(sql,[publickey,email],(err,rows,fields)=>{
         if(err) throw err;
-        res.json({status:'1',message:'Public Key Updated'});
+        res.json({status:'1',message:'RSA Public Key Updated'});
     });
 });
 
-router.get('/getPublicKey',(req,res)=>{
+router.get('/getPublicKeyRSA',(req,res)=>{
     const email=req.query.email;
-    const sql="Select publickey from UserInfo where email=?";
+    const sql="Select publickeyRSA from UserInfo where email=?";
     console.log(sql);
     mysqlConnection.query(sql,email,(err,rows,fields)=>{
         if(err) throw err;
-        res.send({publickey:rows[0].publickey});
+        res.send({publickeyRSA:rows[0].publickeyRSA});
+    });
+});
+
+router.put('/setPublicKeyAES',(req,res)=>{
+    const publickey=req.body.publickeyAES;
+    const email=req.body.email;
+    const sql="UPDATE UserInfo SET publickeyAES=? WHERE email=?";
+    mysqlConnection.query(sql,[publickey,email],(err,rows,fields)=>{
+        if(err) throw err;
+        res.json({status:'1',message:'AES Public Key Updated'});
+    });
+});
+
+router.get('/getPublicKeyAES',(req,res)=>{
+    const email=req.query.email;
+    const sql="Select publickeyAES from UserInfo where email=?";
+    console.log(sql);
+    mysqlConnection.query(sql,email,(err,rows,fields)=>{
+        if(err) throw err;
+        res.send({publickeyAES:rows[0].publickeyAES});
     });
 });
 router.get('/getSocketID',(req,res)=>{
