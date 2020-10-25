@@ -68,7 +68,7 @@ router.get('/getSocketID',(req,res)=>{
 
 router.post('/getContacts', (req,res) =>{
     const phoneNumbers=req.body.phone;
-    var sql = "SELECT email,phone FROM UserInfo where phone IN ('" + phoneNumbers.join("','") + "')";
+    var sql = "SELECT email,phone,socketID FROM UserInfo where phone IN ('" + phoneNumbers.join("','") + "')";
     console.log(sql);
     mysqlConnection.query(sql, (err,rows,fields)=>{
         if(err) throw err;

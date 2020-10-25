@@ -9,6 +9,7 @@ function createTable()
         "socketID varchar(256),"+
         "publickeyRSA TEXT,"+
         "publickeyAES TEXT,"+
+        "lastSeen varchar(256) DEFAULT '',"+
         "PRIMARY KEY (email))";    
     mysqlConnection.query(sql, (err) => { if(err) throw err; });
 

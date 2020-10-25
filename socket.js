@@ -5,6 +5,7 @@ function socketConnection(io)
     io.on('connection',socket=>{
 
         console.log('Made Socket Connection: '+socket.id);
+
     
         socket.on('join', email => {
             const sql="UPDATE UserInfo SET socketID=? WHERE email=?";
@@ -12,6 +13,16 @@ function socketConnection(io)
                 if(err) throw err;
                 console.log("SocketID Updated");
             });
+
+            io.emit(email+'socketUpdate',  {id:socket.id});
+        });
+
+        socket.on('joinRoom',(roomName,socketID)=>{
+            const len=socketID.length;
+            var i=0;
+            for(;i<len;i++){
+                io.sockets.connected[socketID[i]].join(roomName);
+            }
         });
         
         socket.on('messagedetection',(sender,receiver,message,receiverSocketID)=>{
@@ -31,6 +42,10 @@ function socketConnection(io)
                 if(err) throw err;
                 console.log("Message added to databse");
             });
+        });
+
+        socket.on('disconnect', () => {
+            console.log('disconnect event '); // false
         });
     });
 }
