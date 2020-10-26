@@ -8,7 +8,7 @@ router.get('/getAll', (req,res) =>{
     const sql="select * from UserInfo";
     mysqlConnection.query(sql, (err,rows,fields) =>{
         if(err) throw err;
-        console.log(rows);
+        //console.log(rows);
         res.send(rows);
     });
 });
@@ -50,7 +50,7 @@ router.put('/setPublicKeyAES',(req,res)=>{
 router.get('/getPublicKeyAES',(req,res)=>{
     const email=req.query.email;
     const sql="Select publickeyAES from UserInfo where email=?";
-    console.log(sql);
+    //console.log(sql);
     mysqlConnection.query(sql,email,(err,rows,fields)=>{
         if(err) throw err;
         res.send({publickeyAES:rows[0].publickeyAES});
@@ -59,7 +59,7 @@ router.get('/getPublicKeyAES',(req,res)=>{
 router.get('/getSocketID',(req,res)=>{
     const email=req.query.email;
     const sql="Select socketID from UserInfo where email=?";
-    console.log(sql);
+    //console.log(sql);
     mysqlConnection.query(sql,email,(err,rows,fields)=>{
         if(err) throw err;
         res.send({socketID:rows[0].socketID});
@@ -69,10 +69,10 @@ router.get('/getSocketID',(req,res)=>{
 router.post('/getContacts', (req,res) =>{
     const phoneNumbers=req.body.phone;
     var sql = "SELECT email,phone,socketID FROM UserInfo where phone IN ('" + phoneNumbers.join("','") + "')";
-    console.log(sql);
+    //console.log(sql);
     mysqlConnection.query(sql, (err,rows,fields)=>{
         if(err) throw err;
-        console.log(rows);
+        //console.log(rows);
         res.json(rows);
     });
 });
@@ -82,10 +82,10 @@ router.get('/getMessages',(req,res)=>{
     const receiver=req.query.receiver;
     const users=[sender,receiver];
     const sql="select * from msg where sender IN ('" + users.join("','") + "') and receiver IN ('" + users.join("','") + "') ORDER BY created_at";
-    console.log(sql);
+    //console.log(sql);
     mysqlConnection.query(sql, (err,rows,fields)=>{
         if(err) throw err;
-        console.log(rows);
+        //console.log(rows);
         res.json(rows);
     });
 });
@@ -97,10 +97,10 @@ router.post('/login',(req,res)=>{
     };
 
     const sql='select * from UserInfo where email=?';
-    console.log(sql);
+    //console.log(sql);
     mysqlConnection.query(sql,req.body.email,async (err,rows,fields)=>{
         if(err) throw err;
-        console.log(rows);
+        //console.log(rows);
         if(rows.length == 0) return res.json({status:'0',message:'Invalid Email or Password'});
         const validPassword = await bcrypt.compare(req.body.password,rows[0].password);
         if (!validPassword) return res.json({status:0,message:'Invalid email or password.'})
@@ -111,7 +111,7 @@ router.post('/login',(req,res)=>{
 router.post('/register', (req,res) =>{
 
     var sql='select email from UserInfo where email=?';
-    console.log(sql);
+    //console.log(sql);
     mysqlConnection.query(sql,req.body.email, async (err,rows,fields)=>{
         if(err) throw err;
         if(rows.length > 0) return res.json({status:'0',message:'Email already registered.'});
@@ -125,7 +125,7 @@ router.post('/register', (req,res) =>{
             phone:req.body.phone
         };
         sql="INSERT INTO UserInfo set ?";
-        console.log(sql);
+        //console.log(sql);
         mysqlConnection.query(sql,userData, (err,rows,fields)=>{
             if(err) throw err;
             res.send({status:'1',message:'Success.'});
