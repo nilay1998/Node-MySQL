@@ -18,7 +18,7 @@ function socketConnection(io)
 
         console.log('socket: '+socket.id);
         console.log('Made Socket Connection: '+socket.handshake.query.custom_id);
-        
+
         socket.on('join', email => {
             socketIdsMap.set(email,socket.id);
             const sql="UPDATE UserInfo SET socketID=? WHERE email=?";
@@ -33,9 +33,11 @@ function socketConnection(io)
         socket.on('joinRoom',(roomName,socketID)=>{
             const len=socketID.length;
             var i=0;
-            // for(;i<len;i++){
-            //     io.sockets.connected[socketID[i]].join(roomName);
-            // }
+            for(;i<len;i++){
+                if( Object.keys(io.sockets.sockets).includes(socketID[i]) ){
+                    io.sockets.connected[socketID[i]].join(roomName);
+                }
+            }
         });
         
         socket.on('messagedetection',(sender,receiver,message,receiverSocketID)=>{
