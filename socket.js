@@ -8,7 +8,7 @@ function socketConnection(io)
     let count=1;
     io.engine.generateId = function (req) {
         const queryData = url.parse(req.url, true).query;
-        console.log('REQUEST ',req.url+" : "+queryData.custom_id);
+        // console.log('REQUEST ',req.url+" : "+queryData.custom_id);
         return queryData.custom_id;
         //return count++;
     };
@@ -16,8 +16,8 @@ function socketConnection(io)
 
     io.on('connection',socket=>{
 
-        console.log('socket: '+socket.id);
-        console.log('Made Socket Connection: '+socket.handshake.query.custom_id);
+        // console.log('socket: '+socket.id);
+        // console.log('Made Socket Connection: '+socket.handshake.query.custom_id);
 
         socket.on('join', email => {
             socketIdsMap.set(email,socket.id);
@@ -31,13 +31,44 @@ function socketConnection(io)
         });
 
         socket.on('joinRoom',(roomName,socketID)=>{
-            const len=socketID.length;
+
+            const array=JSON.parse(socketID);
+            console.log(roomName+' is Online');
+
+            const len=array.length;
             var i=0;
             for(;i<len;i++){
-                if( Object.keys(io.sockets.sockets).includes(socketID[i]) ){
-                    io.sockets.connected[socketID[i]].join(roomName);
+                console.log(array[i]);
+                if(Object.keys(io.sockets.sockets).includes(array[i])){
+                    io.sockets.connected[array[i]].join(roomName);
                 }
             }
+
+            socket.to(roomName).emit('activeStatus', {status:'Online'});
+
+
+            const email=roomName;
+            const sql="UPDATE UserInfo SET lastSeen=? WHERE email=?";
+            mysqlConnection.query(sql,['Online',email],(err,rows,fields)=>{
+                if(err) throw err;
+                console.log("LastSeen Updated");
+            });
+        });
+
+        socket.on('offline',(roomName)=>{
+
+            console.log(roomName+' is Offline');
+
+            const currTime=Date.now();
+            
+            socket.to(roomName).emit('activeStatus', {status:currTime});
+
+            const email=roomName;
+            const sql="UPDATE UserInfo SET lastSeen=? WHERE email=?";
+            mysqlConnection.query(sql,[currTime,email],(err,rows,fields)=>{
+                if(err) throw err;
+                console.log("LastSeen Updated");
+            });
         });
         
         socket.on('messagedetection',(sender,receiver,message,receiverSocketID)=>{
@@ -62,6 +93,23 @@ function socketConnection(io)
         });
 
         socket.on('disconnect', () => {
+
+            const roomName=socket.id;
+
+            console.log(roomName+' is Offline');
+
+            const currTime=Date.now();
+            
+            socket.to(roomName).emit('activeStatus', {status:currTime});
+
+            const email=roomName;
+            const sql="UPDATE UserInfo SET lastSeen=? WHERE email=?";
+            mysqlConnection.query(sql,[currTime,email],(err,rows,fields)=>{
+                if(err) throw err;
+                console.log("LastSeen Updated");
+            });
+            
+
             console.log('disconnect event '+socket.id); // false
             socket.disconnect();
         });

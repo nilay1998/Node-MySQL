@@ -66,6 +66,16 @@ router.get('/getSocketID',(req,res)=>{
     });
 });
 
+router.get('/getLastSeen',(req,res)=>{
+    const email=req.query.email;
+    const sql="Select lastSeen from UserInfo where email=?";
+    //console.log(sql);
+    mysqlConnection.query(sql,email,(err,rows,fields)=>{
+        if(err) throw err;
+        res.send({lastSeen:rows[0].lastSeen});
+    });
+});
+
 router.post('/getContacts', (req,res) =>{
     const phoneNumbers=req.body.phone;
     var sql = "SELECT email,phone,socketID FROM UserInfo where phone IN ('" + phoneNumbers.join("','") + "')";
