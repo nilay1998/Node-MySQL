@@ -19,6 +19,7 @@ function createTable()
         "receiver varchar(256) NOT NULL,"+
         "message TEXT NOT NULL,"+
         "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"+
+        "isRead BOOLEAN DEFAULT false,"+
         "FOREIGN KEY (sender) REFERENCES UserInfo(email),"+
         "FOREIGN KEY (receiver) REFERENCES UserInfo(email),"+
         "PRIMARY KEY (id))";

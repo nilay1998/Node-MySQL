@@ -92,6 +92,19 @@ function socketConnection(io)
             });
         });
 
+        socket.on('messageRead',(sender,receiver)=>{
+
+            socket.to(receiver).emit('readMessageBy'+sender,{msg:"read"});
+
+            console.log("Padh liya message tumhara");
+            const sql="UPDATE msg SET isRead=? WHERE sender=? AND receiver=?";
+            mysqlConnection.query(sql,[1,receiver,sender],(err,rows,fields)=>{
+                if(err) throw err;
+                console.log("Message Updated");
+                console.log(rows);
+            });
+        });
+
         socket.on('disconnect', () => {
 
             const roomName=socket.id;
